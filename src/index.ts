@@ -1,2 +1,3 @@
-console.log("Hello Typescript")
-console.log(process.argv)
+export const add = function (a: number, b: number) {
+  return a + b;
+}
