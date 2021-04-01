@@ -17,6 +17,7 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
+    "prompt-promise": "^1.0.3",
     "sudoku": "^0.0.3"
   }
 }
