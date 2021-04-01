@@ -1,4 +1,4 @@
-import { stringifySudoku, Sudoku } from "./index"
+import { stringifySudoku, Sudoku, cellToPrettyString, createLinebreaks } from "./index"
 
 test("convert a sudoku board inbto a pretty string", function () {
   const puzzle: Sudoku = [

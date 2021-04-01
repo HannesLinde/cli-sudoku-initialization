@@ -6,13 +6,12 @@ export type Sudoku = Cell[];
 const puzzle: Sudoku = makepuzzle();
 
 let rows = [];
-const createLinebreaks = function (puzzle: Sudoku) {
+export const createLinebreaks = function (puzzle: Sudoku) {
   let sliceEnd: number
   for (let i = 1; i < 82; i += 1) {
     if (i % 9 === 0) {
       let sliceStart: number = (i < 10) ? 0 : sliceEnd;
       sliceEnd = i;
-      // console.log(sliceStart, sliceEnd);
       rows.push(puzzle.slice(sliceStart, sliceEnd));
       sliceStart = sliceEnd;
       // console.log(rows);
@@ -21,13 +20,15 @@ const createLinebreaks = function (puzzle: Sudoku) {
   }
 
   rows.map(row => {
-    row.push(100);
+    if (rows.indexOf(row) < rows.length - 2) {
+      row.push(100);
+    }
   });
 
 }
 createLinebreaks(puzzle);
 
-const cellToPrettyString = function (cell: Cell): string {
+export const cellToPrettyString = function (cell: Cell): string {
   if (cell === null) {
     return " ";
   } else if (cell === 100) {
@@ -37,7 +38,7 @@ const cellToPrettyString = function (cell: Cell): string {
   }
 }
 
-export const stringifySudoku = function (sudoku: Sudoku): string {
+export const stringifySudoku = (sudoku: Sudoku): string => {
   return rows.map(row => row.map(cellToPrettyString).join("")).join("");
 }
 
