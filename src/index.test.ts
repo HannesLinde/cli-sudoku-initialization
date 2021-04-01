@@ -1,4 +1,4 @@
-import { stringifySudoku, Sudoku, cellToPrettyString, createLinebreaks } from "./index"
+/* import { stringifySudoku, Sudoku, cellToPrettyString, createLinebreaks } from "./index"
 
 test("convert a sudoku board inbto a pretty string", function () {
   const puzzle: Sudoku = [
@@ -15,4 +15,4 @@ test("convert a sudoku board inbto a pretty string", function () {
   const puzzleAsString = " 5 42 \n 3 16 \n 9 582 \n 6 9 5 \n 9 75\n 32 \n4 2 7 \n 8 94 7 ";
 
   expect(stringifySudoku(puzzle)).toEqual(puzzleAsString);
-})
+}) */

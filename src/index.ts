@@ -1,4 +1,5 @@
 import { makepuzzle } from 'sudoku';
+import * as prompt from "prompt-promise";
 
 export type Cell = null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 100;
 export type Sudoku = Cell[];
@@ -14,13 +15,11 @@ export const createLinebreaks = function (puzzle: Sudoku) {
       sliceEnd = i;
       rows.push(puzzle.slice(sliceStart, sliceEnd));
       sliceStart = sliceEnd;
-      // console.log(rows);
-      // console.log(sliceStart, sliceEnd);
     };
   }
 
   rows.map(row => {
-    if (rows.indexOf(row) < rows.length - 2) {
+    if (rows.indexOf(row) < rows.length - 1) {
       row.push(100);
     }
   });
@@ -41,6 +40,5 @@ export const cellToPrettyString = function (cell: Cell): string {
 export const stringifySudoku = (sudoku: Sudoku): string => {
   return rows.map(row => row.map(cellToPrettyString).join("")).join("");
 }
-
 console.log(puzzle);
 console.log(stringifySudoku(puzzle));
