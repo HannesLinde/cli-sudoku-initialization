@@ -1,19 +1,19 @@
 import { makepuzzle } from 'sudoku';
 import * as prompt from "prompt-promise";
 
-export type Cell = null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 100;
-export type Sudoku = Cell[];
+type Cell = null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 100;
+type Sudoku = Cell[];
 
 const puzzle: Sudoku = makepuzzle();
 
 let rows = [];
-export const createLinebreaks = function (puzzle: Sudoku) {
+const createLinebreaks = (sudoku: Sudoku) => {
   let sliceEnd: number
   for (let i = 1; i < 82; i += 1) {
     if (i % 9 === 0) {
       let sliceStart: number = (i < 10) ? 0 : sliceEnd;
       sliceEnd = i;
-      rows.push(puzzle.slice(sliceStart, sliceEnd));
+      rows.push(sudoku.slice(sliceStart, sliceEnd));
       sliceStart = sliceEnd;
     };
   }
@@ -25,19 +25,20 @@ export const createLinebreaks = function (puzzle: Sudoku) {
   });
 
 }
+
 createLinebreaks(puzzle);
 
-export const cellToPrettyString = function (cell: Cell): string {
+const cellToPrettyString = (cell: Cell): string => {
   if (cell === null) {
-    return " ";
+    return " |";
   } else if (cell === 100) {
-    return "\\n"
+    return "\n_________________\n"
   } else {
-    return (cell + 1).toString();
+    return `${cell + 1}|`;
   }
 }
 
-export const stringifySudoku = (sudoku: Sudoku): string => {
+const stringifySudoku = (sudoku: Sudoku): string => {
   return rows.map(row => row.map(cellToPrettyString).join("")).join("");
 }
 console.log(puzzle);
