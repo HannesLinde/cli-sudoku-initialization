@@ -47,7 +47,7 @@ const cellToPrettyString = (cell: Cell): string => {
   } else if (cell === 300) {
     return "│\n========================================\n"
   } else if (cell === 400) {
-    return "│"
+    return "│¦"
   } else if (typeof (cell) === "number") {
     return ` ${cell + 1} ¦`;
   }
