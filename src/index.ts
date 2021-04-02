@@ -1,19 +1,18 @@
 #!/usr/bin/env node
 
-import { makepuzzle, solvepuzzle, ratepuzzle } from 'sudoku';
+import { makepuzzle, solvepuzzle } from 'sudoku';
 import * as prompt from "prompt-promise";
 
 type Cell = null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 100 | 200 | 300 | 400;
 type Sudoku = Cell[];
+type Rows = Array<any[]>;
 
-const puzzle: Sudoku = makepuzzle();
+const puzzle = makepuzzle();
 const solution = solvepuzzle(puzzle);
 
-// const query: Promise<string> = prompt("Wanna play Sudoku? You will see the grid in the command line but you have to solve it on paper.\nWhen you are done playing press enter again and see the solution.\nTo continue press 'y', to stop press 'n'");
+let rows: Rows = [];
 
-
-let rows: Array<any[]> = [];
-const createLinebreaks = (sudoku: Sudoku) => {
+const createArraysForEachGridLine = (sudoku: Sudoku): Rows => {
   let sliceEnd: number
   for (let i = 1; i < 82; i += 1) {
     if (i % 9 === 0) {
@@ -23,8 +22,10 @@ const createLinebreaks = (sudoku: Sudoku) => {
       sliceStart = sliceEnd;
     };
   }
+  return rows;
+}
 
-
+const insertGridMarkers = (rows: Rows): Rows => {
   rows.map(row => {
     if ((rows.indexOf(row) + 1) % 3 === 0 && rows.indexOf(row) < rows.length - 1) {
       row.push(100);
@@ -36,11 +37,15 @@ const createLinebreaks = (sudoku: Sudoku) => {
     row.splice(3, 0, 400);
     row.splice(7, 0, 400);
   });
-
+  return rows;
 }
 
+const prepareBasicString = (sudoku: Sudoku) => {
+  createArraysForEachGridLine(sudoku);
+  insertGridMarkers(rows);
+}
 
-const cellToPrettyString = (cell: Cell): string => {
+const basicStringToUsefulString = (cell: Cell): string => {
   if (cell === null) {
     return "   ¦";
   } else if (cell === 100) {
@@ -56,30 +61,26 @@ const cellToPrettyString = (cell: Cell): string => {
   }
 }
 
-const stringifySudoku = (sudoku: Sudoku): string => {
-  return `========================================\n|${rows.map(row => row.map(cellToPrettyString).join("")).join("")}`;
+const stringToGrid = (): string => {
+  return `========================================\n|${rows.map(row => row.map(basicStringToUsefulString).join("")).join("")}`
 }
-const newSudoku = () => {
-  createLinebreaks(puzzle);
-  console.log(stringifySudoku(puzzle));
-};
 
-const showSolution = () => {
-  createLinebreaks(solution);
-  console.log(stringifySudoku(solution));
+const drawSudoku = (sudoku: Sudoku): string => {
+  prepareBasicString(sudoku);
+  return stringToGrid();
 }
 const startSudoku = () => {
-  prompt("Wanna play Sudoku? You will see the grid in the command line but you have to solve it on paper.\nWhen you are done playing press enter again and see the solution.\nTo continue press 'y', to stop press 'n'.").then((query: any) => {
+  prompt("Wanna play Sudoku? You will see the grid in the command line but you have to solve it on paper.\nWhen you are done playing, check the command line to ask for the solution.\nTo get started press 'y', to stop press 'n'.").then((query: any) => {
     if (query === 'y') {
-      newSudoku();
-      prompt("Curious to see the solution? Press 'y' once more (or anything else to leave the game)")
+      console.log(drawSudoku(puzzle));
+      return prompt("Curious to see the solution? Press 'y' (or anything else to leave the game).")
     } else {
       prompt.finish()
     }
   }).then((response: any) => {
     if (response === 'y') {
-      showSolution();
-      prompt("One more game? Press 'y' again!")
+      console.log(drawSudoku(solution));
+      return prompt("One more game? Press 'y' again (or anything else to leave the game)!")
     } else {
       prompt.finish();
     }
@@ -91,5 +92,7 @@ const startSudoku = () => {
     }
   })
 }
+// startSudoku();
 
-startSudoku();
+console.log(drawSudoku(puzzle));
+
