@@ -1,12 +1,12 @@
 import { makepuzzle } from 'sudoku';
 import * as prompt from "prompt-promise";
 
-type Cell = null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 100;
+type Cell = null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 100 | 200 | 300 | 400;
 type Sudoku = Cell[];
 
 const puzzle: Sudoku = makepuzzle();
 
-let rows = [];
+let rows: Array<any[]> = [];
 const createLinebreaks = (sudoku: Sudoku) => {
   let sliceEnd: number
   for (let i = 1; i < 82; i += 1) {
@@ -19,9 +19,17 @@ const createLinebreaks = (sudoku: Sudoku) => {
   }
 
   rows.map(row => {
-    // row.unshift("|");
-    if (rows.indexOf(row) < rows.length - 1) {
+    row.splice(3, 0, 400)
+    row.splice(7, 0, 400);
+  });
+
+  rows.map(row => {
+    if ((rows.indexOf(row) + 1) % 3 === 0 && rows.indexOf(row) < rows.length - 1) {
       row.push(100);
+    } else if (rows.indexOf(row) === (rows.length - 1)) {
+      row.push(300);
+    } else {
+      row.push(200);
     };
   });
 
@@ -31,16 +39,22 @@ createLinebreaks(puzzle);
 
 const cellToPrettyString = (cell: Cell): string => {
   if (cell === null) {
-    return "   |";
+    return "   ¦";
   } else if (cell === 100) {
-    return "\n—————————————————————————————————————\n|"
+    return "│\n========================================\n│"
+  } else if (cell === 200) {
+    return "│\n────────────────────────────────────────\n│"
+  } else if (cell === 300) {
+    return "│\n========================================\n"
+  } else if (cell === 400) {
+    return "│"
   } else if (typeof (cell) === "number") {
-    return ` ${cell + 1} |`;
+    return ` ${cell + 1} ¦`;
   }
 }
 
 const stringifySudoku = (sudoku: Sudoku): string => {
-  return rows.map(row => row.map(cellToPrettyString).join("")).join("");
+  return `========================================\n|${rows.map(row => row.map(cellToPrettyString).join("")).join("")}`;
 }
 console.log(puzzle);
 console.log(stringifySudoku(puzzle));
