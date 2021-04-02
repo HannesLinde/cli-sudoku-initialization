@@ -92,7 +92,5 @@ const startSudoku = () => {
     }
   })
 }
-// startSudoku();
-
-console.log(drawSudoku(puzzle));
+startSudoku();
 
