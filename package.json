@@ -9,6 +9,9 @@
     "start": "node build/index.js",
     "dev": "tsc && node build/index.js"
   },
+  "bin": {
+    "sudoku": "./build/index.js"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.22",
     "@types/node": "^14.14.35",
