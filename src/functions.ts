@@ -13,7 +13,7 @@ const sudokuToRows = (sudoku: Sudoku): Rows => {
   let rows: Rows = [];
   let sliceEnd: number
   for (let i = 0; i < sudoku.length; i += 9) {
-    rows.push(sudoku.slice(i, i + 9)
+    rows.push(sudoku.slice(i, i + 9));
   }
   return rows;
 }
