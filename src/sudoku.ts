@@ -1,10 +1,13 @@
 import { makepuzzle, solvepuzzle } from 'sudoku';
 import * as prompt from "prompt-promise";
 
-type Cell = null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
-type CellMarkers = Cell | "everyThirdLine" | "lastLine" | "normalLine" | "everyThirdColumn";
+type Cell = null | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 100 | 200 | 300 | 400;
 type Sudoku = Cell[];
-type Rows = Array<CellMarkers[]>;
+type Rows = Array<any[]>;
+
+// sudoku package functions
+const puzzle = makepuzzle(); // gives out new Sudoku
+const solution = solvepuzzle(puzzle); // displays solutions
 
 let rows: Rows = [];
 
@@ -25,14 +28,14 @@ const createArraysForEachGridLine = (sudoku: Sudoku): Rows => {
 const insertGridMarkers = (rows: Rows): Rows => {
   rows.map(row => {
     if ((rows.indexOf(row) + 1) % 3 === 0 && rows.indexOf(row) < rows.length - 1) {
-      row.push("everyThirdLine");
+      row.push(100);
     } else if (rows.indexOf(row) === (rows.length - 1)) {
-      row.push("lastLine");
+      row.push(200);
     } else {
-      row.push("normalLine");
+      row.push(300);
     };
-    row.splice(3, 0, "everyThirdColumn");
-    row.splice(7, 0, "everyThirdColumn");
+    row.splice(3, 0, 400);
+    row.splice(7, 0, 400);
   });
   return rows;
 }
@@ -42,16 +45,16 @@ const prepareBasicString = (sudoku: Sudoku) => {
   insertGridMarkers(rows);
 }
 
-const basicStringToUsefulString = (cell: Cell | CellMarkers): string => {
+const basicStringToUsefulString = (cell: Cell): string => {
   if (cell === null) {
     return "   ¦";
-  } else if (cell === "everyThirdLine") {
+  } else if (cell === 100) {
     return "│\n========================================\n│"
-  } else if (cell === "lastLine") {
+  } else if (cell === 200) {
     return "│\n========================================\n"
-  } else if (cell === "normalLine") {
+  } else if (cell === 300) {
     return "│\n────────────────────────────────────────\n│"
-  } else if (cell === "everyThirdColumn") {
+  } else if (cell === 400) {
     return "¦"
   } else if (typeof (cell) === "number") {
     return ` ${cell + 1} ¦`;
@@ -69,8 +72,6 @@ const drawSudoku = (sudoku: Sudoku): string => {
   return stringToGrid();
 }
 export const startSudoku = () => {
-  const puzzle = makepuzzle();
-  const solution = solvepuzzle(puzzle);
   prompt("Wanna play Sudoku? You will see the grid in the command line but you have to solve it on paper.\nWhen you are done playing, check the command line to ask for the solution.\nTo get started press 'y', to stop press 'n'.").then((query: any) => {
     if (query === 'y') {
       console.log(drawSudoku(puzzle));
