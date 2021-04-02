@@ -6,18 +6,14 @@ type CellMarkers = Cell | "everyThirdLine" | "lastLine" | "normalLine" | "everyT
 type Sudoku = Cell[];
 type Rows = Array<CellMarkers[]>;
 
-let rows: Rows = [];
+
 
 // transforming puzzle into a well readable string with several helper functions
-const createArraysForEachGridLine = (sudoku: Sudoku): Rows => {
+const sudokuToRows = (sudoku: Sudoku): Rows => {
+  let rows: Rows = [];
   let sliceEnd: number
-  for (let i = 1; i < 82; i += 1) {
-    if (i % 9 === 0) {
-      let sliceStart: number = (i < 10) ? 0 : sliceEnd;
-      sliceEnd = i;
-      rows.push(sudoku.slice(sliceStart, sliceEnd));
-      sliceStart = sliceEnd;
-    };
+  for (let i = 0; i < sudoku.length; i += 9) {
+    rows.push(sudoku.slice(i, i + 9)
   }
   return rows;
 }
@@ -37,37 +33,31 @@ const insertGridMarkers = (rows: Rows): Rows => {
   return rows;
 }
 
-const prepareBasicString = (sudoku: Sudoku) => {
-  createArraysForEachGridLine(sudoku);
-  insertGridMarkers(rows);
-}
-
-const basicStringToUsefulString = (cell: Cell | CellMarkers): string => {
-  if (cell === null) {
-    return "   ¦";
-  } else if (cell === "everyThirdLine") {
-    return "│\n========================================\n│"
-  } else if (cell === "lastLine") {
-    return "│\n========================================\n"
-  } else if (cell === "normalLine") {
-    return "│\n────────────────────────────────────────\n│"
-  } else if (cell === "everyThirdColumn") {
-    return "¦"
-  } else if (typeof (cell) === "number") {
-    return ` ${cell + 1} ¦`;
+const rowsWithMarkersToString = (rowsWithMarkers: Rows): string => {
+  const basicStringToUsefulString = (cell: Cell | CellMarkers): string => {
+    if (cell === null) {
+      return "   ¦";
+    } else if (cell === "everyThirdLine") {
+      return "│\n========================================\n│"
+    } else if (cell === "lastLine") {
+      return "│\n========================================\n"
+    } else if (cell === "normalLine") {
+      return "│\n────────────────────────────────────────\n│"
+    } else if (cell === "everyThirdColumn") {
+      return "¦"
+    } else if (typeof (cell) === "number") {
+      return ` ${cell + 1} ¦`;
+    }
   }
-}
 
-// print the string into a grid that resembles a typical sudoku
-const stringToGrid = (): string => {
-  return `========================================\n|${rows.map(row => row.map(basicStringToUsefulString).join("")).join("")}`
+  return `========================================\n|${rowsWithMarkers.map(row => row.map(basicStringToUsefulString).join("")).join("")}`
 }
 
 // brings together the string and the printing method
 const drawSudoku = (sudoku: Sudoku): string => {
-  prepareBasicString(sudoku);
-  return stringToGrid();
+  return rowsWithMarkersToString(insertGridMarkers(sudokuToRows(sudoku)));
 }
+
 export const startSudoku = () => {
   const puzzle = makepuzzle();
   const solution = solvepuzzle(puzzle);
@@ -80,7 +70,6 @@ export const startSudoku = () => {
     }
   }).then((response: any) => {
     if (response === 'y') {
-      rows = [];
       console.log(drawSudoku(solution));
       return prompt("One more game? Press 'y' again (or anything else to leave the game)!")
     } else {
@@ -88,7 +77,6 @@ export const startSudoku = () => {
     }
   }).then((response: any) => {
     if (response === 'y') {
-      rows = [];
       startSudoku();
     } else {
       prompt.finish()
