@@ -80,6 +80,7 @@ export const startSudoku = () => {
     }
   }).then((response: any) => {
     if (response === 'y') {
+      rows = [];
       console.log(drawSudoku(solution));
       return prompt("One more game? Press 'y' again (or anything else to leave the game)!")
     } else {
@@ -87,6 +88,7 @@ export const startSudoku = () => {
     }
   }).then((response: any) => {
     if (response === 'y') {
+      rows = [];
       startSudoku();
     } else {
       prompt.finish()
