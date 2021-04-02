@@ -19,9 +19,10 @@ const createLinebreaks = (sudoku: Sudoku) => {
   }
 
   rows.map(row => {
+    // row.unshift("|");
     if (rows.indexOf(row) < rows.length - 1) {
       row.push(100);
-    }
+    };
   });
 
 }
@@ -30,11 +31,11 @@ createLinebreaks(puzzle);
 
 const cellToPrettyString = (cell: Cell): string => {
   if (cell === null) {
-    return " |";
+    return "   |";
   } else if (cell === 100) {
-    return "\n_________________\n"
-  } else {
-    return `${cell + 1}|`;
+    return "\n—————————————————————————————————————\n|"
+  } else if (typeof (cell) === "number") {
+    return ` ${cell + 1} |`;
   }
 }
 
